@@ -9,5 +9,5 @@ MiniFloatModels = "839dff2b-6fdf-4386-afa2-f3721eae4ce7"
 
 [compat]
 Combinatorics = "1"
-MiniFloatModels = "0.1 - 0.5
+MiniFloatModels = "0.1 - 0.5"
 julia = "1.11"

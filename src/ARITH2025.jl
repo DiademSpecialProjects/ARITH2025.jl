@@ -1,10 +1,16 @@
 module ARITH2025
 
-export proportion_halfway, all_unique_pairs, all_unique_triples
+export ratio_exactly_halfway, add, mul, fusedmuladd,
+       SFiniteFloats, SExtendedFloats
 
-using Combinatorics, MiniFloatModels
+using Combinatorics
+using MiniFloatModels: SExtendedFloats, SFiniteFloats
 
 include("combinatorics.jl")
 include("halfway.jl")
+include("arithmetic.jl")
+
+include("calculate.jl")
+include("plot.jl")
 
 end # module
