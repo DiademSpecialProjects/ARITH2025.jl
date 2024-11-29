@@ -1,7 +1,6 @@
 module ARITH2025
 
-export all_pairs_unique, all_triples_unique, 
-       all_pairs_commutative, all_triples_firsttwo_commutative
+export proportion_halfway, all_unique_pairs, all_unique_triples
 
 using Combinatorics, MiniFloatModels
 

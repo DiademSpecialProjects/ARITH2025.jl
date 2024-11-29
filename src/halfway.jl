@@ -1,15 +1,15 @@
-proportion_halfway(xs, ys) = nhalfway(xs, ys) // length(ys)
+proportion_halfway(xs, results) = 
+    count_halfway(xs, results) // length(results)
 
-function nhalfway(xs, ys)
-    halfways = halfway(xs)
-    sum(map(x->x in halfways, ys))
+function count_halfway(xs, results)
+    halfway_values = values_halfway_between(xs)
+    sum(map(x->x in halfway_values, results))
 end
 
-function halfway(xs)
-    n = length(xs)
-    sxs = map(Float64, sort(xs))
-    zipped = zip(sxs[1:end-1], sxs[2:end])
-    map(xy->+(xy...) ./2, zipped)
+function values_halfway_between(xs)
+    xs_sorted = map(Float64, sort(xs))
+    zipped = zip(xs_sorted[1:end-1], xs_sorted[2:end])
+    map(xy->(xy[1]/2 + xy[2]/2), zipped)
 end
 
 
