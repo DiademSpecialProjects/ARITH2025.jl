@@ -1,7 +1,7 @@
 module ARITH2025
 
-export ratio_exactly_halfway, add, mul, fusedmuladd,
-       SFiniteFloats, SExtendedFloats
+export finite_values, SFiniteFloats, SExtendedFloats,
+       add_ratios, mul_ratios, fma_ratios, bitprecisions
 
 using Combinatorics
 using MiniFloatModels: SExtendedFloats, SFiniteFloats

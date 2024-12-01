@@ -1,3 +1,7 @@
+add_exactly_halfway(xs) = ratio_exactly_halfway(add, xs)
+mul_exactly_halfway(xs) = ratio_exactly_halfway(mul, xs)
+fma_exactly_halfway(xs) = ratio_exactly_halfway(fusedmuladd, xs)
+
 add(x, y) = x + y
 add(xy) = add(xy[1], xy[2])
 
@@ -22,4 +26,3 @@ function ratio_exactly_halfway(fn, xs)
     ys = map(fn, nd_values)
     proportion_halfway(xs, ys)
 end
-
