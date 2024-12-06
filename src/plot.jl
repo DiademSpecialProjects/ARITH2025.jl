@@ -114,7 +114,7 @@ end
 
 se_amfplot2(bits) = Plots.plot(se_amfmatrix(bits); markers..., lines..., labels..., legends...,                    
     xaxis=("\nprecision (bits)\n", (2-1//4,bits-3//4), 1:bits-1),                               
-    yaxis=("\nproportion halfway\n", (0, ymax[bits-2]), 0:1/16:ymax[bits-2]),                                                                                                                      
+    yaxis=("\nproportion halfway\n", (0, ymax[bits-2]), 0:1/16:ymax[bits-2]), tickfontsize=11,                                                                                                                     
     title="\n$bits-bit floats\n",)
 
 function se_plot(bits)
@@ -133,8 +133,19 @@ end
 
 latex_frac(n,d=1) = isone(d) ? L"%$(n)" : L"\frac{%$(n)}{%$(d)}"
 
+amfplot(bits) = Plots.plot(amfmatrix(bits); markers..., lines..., labels..., legends...,                           
+                            xaxis=("precision (bits)", (1-1//4,bits-3//4), 1:bits-1),                                   
+                            yaxis=("\nproportion halfway", (0, ymax[bits-2]), 0:0.05:ymax[bits-2]),                                                                                                                        
+                            title="\n$bits-bit floats")
 
-#=
+function amfmatrix2(bits)                                                                                          
+    vec = collect(Iterators.flatten([Tuple(amff2(bits))...]))                                                      
+    n = length(vec)                                                                                            
+    rows = 3                                                                                               
+    cols = fld(n, rows)                                                                                            
+    reshape(vec, cols, rows)                                                                                       
+end
+                            #=
 using Plots
 using LaTeXStrings
 gr()
@@ -162,7 +173,7 @@ end
 =#
 
 
-plot52,plot62,plot72,plot82 = se_amfplot2.(5:8)
+plot52,plot62,plot72,plot82 = se_plot.(5:8)
 plot56782 = plot(plot52,plot62,plot72,plot82,layout=(2,2),size=(1024,1024), margin=(6.0,:mm))
 Plots.savefig(plot56782, "./se_plot56782.png") 
                        

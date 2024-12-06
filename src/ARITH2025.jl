@@ -8,6 +8,8 @@ using MiniFloatModels: SExtendedFloats, SFiniteFloats
 
 include("combinatorics.jl")
 include("halfway.jl")
+
+include("round.jl")
 include("arithmetic.jl")
 
 include("calculate.jl")
