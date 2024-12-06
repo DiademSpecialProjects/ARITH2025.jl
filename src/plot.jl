@@ -1,4 +1,3 @@
-using LaTeXStrings, Plots, Makie
 
 series_attribute(attribute) =
     reshape(attribute, 1, length(attribute))    
@@ -22,35 +21,13 @@ markercolor = [:DarkOrange3, :indigo, :mediumseagreen] # , :deepskyblue, :black,
 markercolor = [:VioletRed4, :indigo, :mediumseagreen] #, :deepskyblue, :black, :black, :black, :black]
 markers = series_attributes(; marker, markersize, markercolor)
 
-linestyle = [:dot, :dot, :dot] # , :dot, :dot, :dot, :dot]
-linewidth = [3, 3, 3] # , 2, 2, 2, 2]
-linecolor = [:skyblue, :Palevioletred, :cadetblue] #, :lightskyblue, :black, :black, :black, :black]
-linecolor = [:Pink4,:RoyalBlue2, :DarkSeaGreen] #, :cadetblue, :lightskyblue, :black, :black, :black, :black]
-linealpha = [0.75, 0.75, 0.75] # , 0.5, 0.5, 0.5, 0.5]
+linestyle = [:dot, :dot, :dot]
+linewidth = [3, 3, 3]
+linecolor = [:Pink4,:RoyalBlue2, :DarkSeaGreen]
+linealpha = [0.75, 0.75, 0.75]
 lines = series_attributes(; linestyle, linewidth, linecolor, linealpha)
 
-maxproportion = round.(maximum.(amfmatrix(i) for i=3:8), base=10, digits=3)
 ymax = [0.25, 0.25, 0.2125, 0.2125, 0.2125, 0.2125]
-
-amfplot(bits) = Plots.plot(amfmatrix(bits); markers..., lines..., labels..., legends...,
-                       xaxis=("precision (bits)", (1-1//4,bits-3//4), 1:bits-1),
-                       yaxis=("\nproportion halfway", (0, ymax[bits-2]), 0:0.05:ymax[bits-2]),
-                       title="\n$bits-bit finite floats")
-
-
-plot5,plot6,plot7,plot8 = amfplot.(5:8)
-plot5678 = plot(plot5,plot6,plot7,plot8,layout=(2,2),size=(1024,1024), margin=(6.0,:mm))
-Plots.savefig(plot5678, "./plot5678.png") 
-
-amfplot2(bits) = Plots.plot(amfmatrix2(bits); markers..., lines..., labels..., legends...,
-                       xaxis=("precision (bits)", (2-1//4,bits-3//4), 2:bits-1),
-                       yaxis=("\nproportion halfway", (0, ymax[bits-2]), 0:0.05:ymax[bits-2]),
-                       title="\n$bits-bit finite floats")
-
-# test
-# ys = cumsum(randn(8, 3), dims=1)
-# zs = cumsum(randn(8, 7), dims=1)
-# Plots.plot(ys; markers..., lines..., labels..., legends...)
 
 
 BitsMin = 2
@@ -60,9 +37,10 @@ bitprecisions =[(bits, precision) for bits in BitsMin:BitsMax for precision in 1
 sfinites = map(x->finite_values(SFiniteFloats,x...), bitprecisions)
 sextendeds = map(x->finite_values(SExtendedFloats,x...), bitprecisions)
 
-sfdict = Dict(bitprecisions .=> sfinites)
+# sfdict = Dict(bitprecisions .=> sfinites)
 sedict = Dict(bitprecisions .=> sextendeds)
 
+#=
 sf_addratios = Dict(bitprecisions .=> [add_exactly_halfway(sfdict[bp]) for bp in bitprecisions])
 sf_mulratios = Dict(bitprecisions .=> [mul_exactly_halfway(sfdict[bp]) for bp in bitprecisions])
 sf_fmaratios1 = [fma_exactly_halfway(sfdict[bp]) for bp in bitprecisions];
@@ -83,12 +61,21 @@ function sf_amfmatrix(bits)
     reshape(vec, cols, rows)
 end
 
-
 sf_amfplot2(bits) = Plots.plot(sf_amfmatrix(bits); markers..., lines..., labels..., legends...,
                        xaxis=("precision (bits)", (2-1//4,bits-3//4), 1:bits-1),
                        yaxis=("\nproportion halfway", (0, ymax[bits-2]), 0:0.05:ymax[bits-2]),
                        title="\n$bits-bit finite floats")
 
+sf_amfplot1(bits) = Plots.plot(sf_amfmatrix(bits); markers..., lines..., labels..., legends...,
+                       xaxis=("precision (bits)", (1-1//4,bits-3//4), 1:bits-1),
+                       yaxis=("\nproportion halfway", (0, ymax[bits-2]), 0:0.05:ymax[bits-2]),
+                       title="\n$bits-bit finite floats")
+
+
+plot5,plot6,plot7,plot8 = sf_amfplot2.(5:8)
+plot5678 = plot(plot5,plot6,plot7,plot8,layout=(2,2),size=(1024,1024), margin=(6.0,:mm))
+Plots.savefig(plot5678, "./plot5678.png") 
+=#
 # se
 
 
@@ -145,7 +132,8 @@ function amfmatrix2(bits)
     cols = fld(n, rows)                                                                                            
     reshape(vec, cols, rows)                                                                                       
 end
-                            #=
+
+#=
 using Plots
 using LaTeXStrings
 gr()

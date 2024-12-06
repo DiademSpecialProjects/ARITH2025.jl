@@ -1,6 +1,6 @@
 import Base: round, trailing_zeros
 
-function Base.round(x, xs; mode::RoundingMode=RoundNearest)
+function Base.round(x, xs, mode::RoundingMode=RoundNearest)
     isnan(x) && return xs[isnan.(xs)]
     idx = searchsortedfirst(xs, x)
     idx === 1 && return xs[1]
@@ -96,15 +96,6 @@ function unsafe_roundkp(x, k, p, isSigned=true, isFinite=false)
     y = round(abs(x); base=2, sigdigits=p)
     return copysign(y, x)
 end
-
-import Base: iseven
-
-Base.iseven(x::Float64) =
-    iseven(reinterpret(UInt64, abs(x)))
-Base.iseven(x::Float32) =
-    iseven(reinterpret(UInt32, abs(x)))
-Base.iseven(x::Float16) =
-    iseven(reinterpret(UInt16, abs(x)))
 
 function floats(k, p, isSigned, isFinite)
     if isSigned

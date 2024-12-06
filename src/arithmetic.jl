@@ -1,28 +1,38 @@
-add_exactly_halfway(xs) = ratio_exactly_halfway(add, xs)
-mul_exactly_halfway(xs) = ratio_exactly_halfway(mul, xs)
-fma_exactly_halfway(xs) = ratio_exactly_halfway(fusedmuladd, xs)
+add2(x,y,xs, mode) = round(Float64(x)+Float64(y), xs, mode)
+add2(xy, xs, mode) = add2(xy[1], xy[2], xs, mode)
+sub2(x,y,xs, mode) = round(Float64(x)-Float64(y), xs, mode)
+mul2(x,y,xs, mode) = round(Float64(x)*Float64(y), xs, mode)
+fma3(x,y,z, xs, mode) = round(fma(Float64(x), Float64(y), Float64(z)), xs, mode)
+faa3(x,y,z, xs, mode) = round((Float64(x) + Float64(y) + Float64(z)), xs, mode)
 
-add(x, y) = x + y
-add(xy) = add(xy[1], xy[2])
+add3(a,b,c,d, xs, mode) = round(Float64(a)+Float64(b)+Float64(c)+Float64(d), xs, mode)
+mul3(a,b,c,d, xs, mode) = round(Float64(a)*Float64(b)*Float64(c)*Float64(d), xs, mode)
+add4(a,b,c,d, xs, mode) = round(Float64(a)+Float64(b)+Float64(c)+Float64(d), xs, mode)
+mul4(a,b,c,d, xs, mode) = round(Float64(a)*Float64(b)*Float64(c)*Float64(d), xs, mode)
 
-sub(x, y) = x + y
-sub(xy) = sub(xy[1], xy[2])
-
-mul(x, y) = x * y
-mul(xy) = mul(xy[1], xy[2])
-
-fusedmuladd(x, y, z) = fma(x, y, z)
-fusedmuladd(xyz) = fusedmuladd(xyz[1], xyz[2], xyz[3])
-
-arity(fn::Function) = arity(Val(fn))
-arity(fn::Val{add}) = 2
-arity(fn::Val{sub}) = 2
-arity(fn::Val{mul}) = 2
-arity(fn::Val{fusedmuladd}) = 3
-
-function ratio_exactly_halfway(fn, xs)
-    argcount = arity(fn)
-    nd_values = all_unique(xs, argcount)
-    ys = map(fn, nd_values)
-    proportion_halfway(xs, ys)
+function addscaled(v, xs, scaleby, mode)
+    ys = map(x->Float64(x) * scaleby, v)
+    yspaired = adjacentpairs(ys)
+    z = foldl(x->add2(x, xs, mode), yspaired)
+    round(z, xs, mode)
 end
+
+#=
+ ys = map(x->Float64(x) * scaleby, v);
+ ys = map(Float64, v);
+ 
+ yspaired = adjacentpairs(ys);
+ pairsums = map(xy->+(xy...), yspaired);
+
+=#
+
+function adjacentpairs(xs)
+    n = length(xs)
+    halfn = n >> 1
+    if !iseven(n)
+        throw(DomainError("n ($(length(n))) must be even"))
+    end
+    xys = reshape(xs, 2, halfn)
+    [xys[:,i] for i=1:halfn]
+end
+

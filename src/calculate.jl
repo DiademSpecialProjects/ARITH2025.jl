@@ -11,8 +11,8 @@ extendedvals = map(x->finite_values(SExtendedFloats,x...), bitprecisions)
 finites = Dict(bitprecisions .=> finitevals)
 extendeds = Dict(bitprecisions .=> extendedvals)
 
-add_ratios = Dict(bitprecisions .=> [add_exactly_halfway(dict[bp]) for bp in bitprecisions])
-mul_ratios = Dict(bitprecisions .=> [mul_exactly_halfway(dict[bp]) for bp in bitprecisions])
-fma_ratios = Dict(bitprecisions .=> [fma_exactly_halfway(dict[bp]) for bp in bitprecisions])
+add_ratios = Dict(bitprecisions .=> [add_exactly_halfway(extendeds[bp]) for bp in bitprecisions])
+mul_ratios = Dict(bitprecisions .=> [mul_exactly_halfway(extendeds[bp]) for bp in bitprecisions])
+fma_ratios = Dict(bitprecisions .=> [fma_exactly_halfway(extendeds[bp]) for bp in bitprecisions])
 
 
