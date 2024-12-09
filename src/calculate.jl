@@ -15,4 +15,8 @@ add_ratios = Dict(bitprecisions .=> [add_exactly_halfway(extendeds[bp]) for bp i
 mul_ratios = Dict(bitprecisions .=> [mul_exactly_halfway(extendeds[bp]) for bp in bitprecisions])
 fma_ratios = Dict(bitprecisions .=> [fma_exactly_halfway(extendeds[bp]) for bp in bitprecisions])
 
+finite_add_ratios = Dict(bitprecisions .=> [add_exactly_halfway(finites[bp]) for bp in bitprecisions])
+finite_mul_ratios = Dict(bitprecisions .=> [mul_exactly_halfway(finites[bp]) for bp in bitprecisions])
+finite_fma_ratios = Dict(bitprecisions .=> [fma_exactly_halfway(finites[bp]) for bp in bitprecisions])
+
 
