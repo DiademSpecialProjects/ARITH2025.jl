@@ -12,6 +12,11 @@ se_addratios = load_object("se_addratios.jld2")
 se_mulratios = load_object("se_mulratios.jld2")
 se_fmaratios = load_object("se_fmaratios.jld2")
 
+sf_addratios = load_object("sf_addratios.jld2")
+sf_mulratios = load_object("sf_mulratios.jld2")
+sf_fmaratios = load_object("sf_fmaratios.jld2")
+
+
 plotdir()
 
 series_attribute(attribute) =
@@ -89,13 +94,18 @@ sf_amfplot2(bits) = Plots.plot(sf_amfmatrix(bits); markers..., lines..., labels.
                        yaxis=("\nproportion halfway", (0, ymax[bits-2]), 0:0.05:ymax[bits-2]),
                        title="\n$bits-bit finite floats")
 
-sf_amfplot1(bits) = Plots.plot(sf_amfmatrix(bits); markers..., lines..., labels..., legends...,
-                       xaxis=("precision (bits)", (1-1//4,bits-3//4), 1:bits-1),
-                       yaxis=("\nproportion halfway", (0, ymax[bits-2]), 0:0.05:ymax[bits-2]),
-                       title="\n$bits-bit finite floats")
+sf_amfplot1(bits) = Plots.plot(sf_amfmatrix(bits); markers..., lines..., labels..., legends...,                    
+    xaxis=("\nprecision (bits)\n", (1-1//4,bits-3//4), 1:bits-1),                               
+    yaxis=("\nproportion halfway\n", (0, ymax[bits-2]), 0:1/16:ymax[bits-2]), tickfontsize=13,                                                                                                                     
+    title="\n$bits-bit finite floats\n",)
 
+function sf_plot(bits)
+    plt = sf_amfplot1(bits)
+    remap_yticks(plt)
+    # plot!([1/32,3/32,5/32,7/32,9/32];seriestype=:hline,linecolor=:black, linestyle=:dash, linealpha=0.1)       
+end
 
-plot5,plot6,plot7,plot8 = sf_amfplot2.(5:8)
+plot3f,plot4f,plot5f,plot6f,plot7f,plot8f = sf_plot.(3:8)
 plot5678 = plot(plot5,plot6,plot7,plot8,layout=(2,2),size=(1024,1024), margin=(6.0,:mm))
 Plots.savefig(plot5678, "./plot5678.png") 
 =#
@@ -128,9 +138,9 @@ function se_amfmatrix(bits)
 end
 
 se_amfplot2(bits) = Plots.plot(se_amfmatrix(bits); markers..., lines..., labels..., legends...,                    
-    xaxis=("\nprecision (bits)\n", (2-1//4,bits-3//4), 1:bits-1),                               
+    xaxis=("\nprecision (bits)\n", (1-1//4,bits-3//4), 1:bits-1),                               
     yaxis=("\nproportion halfway\n", (0, ymax[bits-2]), 0:1/16:ymax[bits-2]), tickfontsize=13,                                                                                                                     
-    title="\n$bits-bit floats\n",)
+    title="\n$bits-bit extended floats\n",)
 
 function se_plot(bits)
     plt = se_amfplot2(bits)
